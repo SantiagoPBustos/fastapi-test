@@ -22,7 +22,7 @@ def create_task(task: Task):
     return task
 
 # Operación para obtener todas las tareas
-@app.get("/tasks/", response_model=list[Task])
+@app.get("/tasks/", response_model=Task)
 def read_tasks():
     return tasks_db
 
