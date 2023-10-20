@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException, APIRouter
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 application = FastAPI(    
@@ -6,10 +6,6 @@ application = FastAPI(
     description="Esta es una descripción personalizada de mi API",
     version="1.0.5",
     )
-
-router = APIRouter()
-
-router.tags = ["Reportes"]
 
 # Model para las tareas
 class Task(BaseModel):
@@ -21,24 +17,21 @@ class Task(BaseModel):
 tasks_db = []
 
 # Operación para crear una tarea
-@router.post("/tasks/", response_model=Task)
+@application.post("/tasks/", tags = ["Reportes"], response_model=Task)
 def create_task(task: Task):
     return task
 
 # Operación para obtener todas las tareas
-@router.get("/tasks/", response_model=list[Task])
+@application.get("/tasks/", response_model=list[Task])
 def read_tasks():
     return tasks_db
 
 # Operación para obtener una tarea por ID
-@router.get("/get_tasks/{task_id}", response_model=Task)
+@application.get("/get_tasks/{task_id}", response_model=Task)
 def read_task(task_id: int):
     if task_id < 0 or task_id >= len(tasks_db):
         raise HTTPException(status_code=404, detail="Tarea no encontrada")
     return tasks_db[task_id]
-
-
-application.include_router(router)
 
 from enum import Enum
 # Datos de ejemplo (en una aplicación real, estos datos vendrían de una base de datos)
