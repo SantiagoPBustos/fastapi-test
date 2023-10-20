@@ -21,7 +21,7 @@ class Task(BaseModel):
 tasks_db = []
 
 # Operación para crear una tarea
-@router.post("/tasks/", response_model=list[Task])
+@router.post("/tasks/", response_model=Task)
 def create_task(task: Task):
     return task
 
@@ -39,6 +39,7 @@ def read_task(task_id: int):
 
 
 application.include_router(router)
+
 from enum import Enum
 # Datos de ejemplo (en una aplicación real, estos datos vendrían de una base de datos)
 class RecordLimit(Enum):
