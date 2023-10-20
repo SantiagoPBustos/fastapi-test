@@ -1,7 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
-application = FastAPI(    
+app = FastAPI(    
     title="Mi API Personalizada",
     description="Esta es una descripción personalizada de mi API",
     version="1.0.5",
@@ -17,17 +17,17 @@ class Task(BaseModel):
 tasks_db = []
 
 # Operación para crear una tarea
-@application.post("/tasks/", tags = ["Reportes"], response_model=Task)
+@app.post("/tasks/", tags = ["Reportes"], response_model=Task)
 def create_task(task: Task):
     return task
 
 # Operación para obtener todas las tareas
-@application.get("/tasks/", response_model=list[Task])
+@app.get("/tasks/", response_model=list[Task])
 def read_tasks():
     return tasks_db
 
 # Operación para obtener una tarea por ID
-@application.get("/get_tasks/{task_id}", response_model=Task)
+@app.get("/get_tasks/{task_id}", response_model=Task)
 def read_task(task_id: int):
     if task_id < 0 or task_id >= len(tasks_db):
         raise HTTPException(status_code=404, detail="Tarea no encontrada")
@@ -43,7 +43,7 @@ class RecordLimit(Enum):
 # Datos de ejemplo (en una aplicación real, estos datos vendrían de una base de datos)
 sample_data = list(range(1, 101))  # Una lista de números del 1 al 100
 
-@application.get("/get_records/")
+@app.get("/get_records/")
 async def get_records(limit: RecordLimit = RecordLimit.twenty):
     """
     Obtén una lista de registros con opciones de filtrado.
